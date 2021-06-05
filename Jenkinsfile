@@ -1,16 +1,12 @@
-node {
-    stage ('SCM checkout'){
-        checkout scm
-    }
-}
+
 properties([
     parameters([
               booleanParam(name: 'Refresh', defaultValue: true, description: 'Read Jenkinsfile and exit.'),
-              separator(name: "WEB_BROWSERS", sectionHeader: "Web Browsers"),
+              separator(name: 'WEB_BROWSERS', sectionHeader: 'Web Browsers'),
               booleanParam(name: 'chrome', defaultValue: true, description: 'Controls whether to run tests on Chrome Browser or not'),
               booleanParam(name: 'edge', defaultValue: true, description: 'Controls whether to run tests on Edge Browser or not'),
               booleanParam(name: 'safari', defaultValue: true, description: 'Controls whether to run tests on Safari Browser or not'),
-              separator(name: "MOBILE_BROWSERS", sectionHeader: "Mobile Browsers"),
+              separator(name: 'MOBILE_BROWSERS', sectionHeader: 'Mobile Browsers'),
               booleanParam(name: 'iphone', defaultValue: true, description: 'Controls whether to run tests on iPhone Browser or not'),
               booleanParam(name: 'galaxys20', defaultValue: true, description: 'Controls whether to run tests on GalaxyS20 Browser or not'),
               booleanParam(name: 'ipad', defaultValue: true, description: 'Controls whether to run tests on iPad Browser or not'),
@@ -22,51 +18,16 @@ properties([
     ])
 ])
 
-def PROJECTID = '91839'
-
 pipeline {
-    agent none
+    agent any
     stages {
         stage('Read Jenkinsfile') {
             when {
-                expression { return parameters.Refresh == true }
+                expression { parameters.Refresh == true }
             }
             steps {
-                echo("Ended pipeline early.")        
+                echo "Jenkinsfile reloaded successfully"
             }
         }
-        stage ('Build'){
-            agent {
-                dockerfile {
-                    filename 'Dockerfile'
-                    dir 'jenkins'
-                }
-            }
-            environment {
-              HOME = '.'
-            }
-            steps("build") {
-                dir(env.WORKSPACE) {
-                       sh "mvn clean test -DBrowserType=browserstack_'${params.BROWSER_TYPE}'"	
-                }
-            }
-            post {
-                always {
-                    sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
-                    archiveArtifacts artifacts: 'src/test/resources/Reports/Extent Report.html'
-                    publishHTML (target: [
-                        allowMissing: false,
-                        alwaysLinkToLastBuild: false,
-                        keepAll: true,
-                        reportDir: 'target/surefire-reports/',
-                        reportFiles: 'index.html',
-                        reportName: "CBC Automation Report"
-                    ])
-                    sh "npm cache clean  --force"
-                    sh "node delivery.js projectid=${PROJECTID} cycleid=3333"
-                    cleanWs()
-                }
-            }
-        }
-    }
+     }
 }
