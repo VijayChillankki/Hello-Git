@@ -43,6 +43,15 @@ pipeline {
         }
 
         stage('Execute Web Browsers') {
+            agent {
+                dockerfile {
+                    filename 'Dockerfile'
+                    dir 'jenkins'
+                }
+            }
+            environment {
+              HOME = '.'
+            }
             steps {
                 script {
                     web.each { entity ->
@@ -56,7 +65,7 @@ pipeline {
             }
         }
 
-                stage('Execute Mobile Browsers') {
+        stage('Execute Mobile Browsers') {
             steps {
                 script {
                     mob.each { entity ->
