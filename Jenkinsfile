@@ -15,8 +15,20 @@ properties([
               string(name: 'CHROME_QTEST_CYCLE_ID', defaultValue: '2478396', description: 'The Cycle ID is used for chrome test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'EDGE_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for edge test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'SAFARI_CYCLE_ID', defaultValue: '2478398', description: 'The Cycle ID is used for safari test results within the QTest Platform. This number typically differs per release.'),
-    ])
+    ]) 
 ])
+
+def web = [
+    chrome: params.chrome,
+    edge: params.edge,
+    safari: params.safari,
+]
+
+def mob = [
+    iphone: params.iphone,
+    galaxys20: params.galaxys20,
+    ipad: params.ipad
+]
 
 pipeline {
     agent any
@@ -29,5 +41,33 @@ pipeline {
                 echo "Jenkinsfile reloaded successfully"
             }
         }
-     }
+
+        stage('Execute Web Browsers') {
+            steps {
+                script {
+                    web.each { entity ->
+                        stage (entity.key) {
+                            if (entity.value) {
+                                echo "$entity.key browser executed"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+                stage('Execute Mobile Browsers') {
+            steps {
+                script {
+                    mob.each { entity ->
+                        stage (entity.key) {
+                            if (entity.value) {
+                                echo "$entity.key mobile browser executed"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
