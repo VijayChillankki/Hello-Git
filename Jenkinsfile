@@ -5,6 +5,7 @@ node {
 }
 properties([
     parameters([
+              booleanParam(name: 'Refresh', defaultValue: true, description: 'Read Jenkinsfile and exit.'),
               separator(name: "WEB_BROWSERS", sectionHeader: "Web Browsers"),
               booleanParam(name: 'chrome', defaultValue: true, description: 'Controls whether to run tests on Chrome Browser or not'),
               booleanParam(name: 'edge', defaultValue: true, description: 'Controls whether to run tests on Edge Browser or not'),
@@ -26,6 +27,14 @@ def PROJECTID = '91839'
 pipeline {
     agent none
     stages {
+        stage('Read Jenkinsfile') {
+            when {
+                expression { return parameters.Refresh == true }
+            }
+            steps {
+                echo("Ended pipeline early.")        
+            }
+        }
         stage ('Build'){
             agent {
                 dockerfile {
