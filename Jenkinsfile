@@ -23,7 +23,7 @@ pipeline {
     stages {
         stage('Read Jenkinsfile') {
             when {
-                expression { parameters.Refresh == true }
+                expression { params.Refresh == true }
             }
             steps {
                 echo "Jenkinsfile reloaded successfully"
