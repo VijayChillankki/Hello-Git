@@ -63,23 +63,10 @@ pipeline {
                         reportName: "CBC Automation Report"
                     ])
                     sh "npm cache clean  --force"
-                    def testcycleid = getTestCycleIDbyBrowserType(${params.BROWSER_TYPE})
-                    sh "node delivery.js projectid=${PROJECTID} cycleid=${testcycleid}"
+                    sh "node delivery.js projectid=${PROJECTID} cycleid=3333"
                     cleanWs()
                 }
             }
         }
     }
 }
-
-    def getTestCycleIDbyBrowserType(BROWSER_TYPE) {
-    if (BROWSER_TYPE == 'chrome') {
-        return ${params.CHROME_QTEST_CYCLE_ID}
-    }
-    else if (BROWSER_TYPE == 'edge') {
-        return ${params.EDGE_QTEST_CYCLE_ID}
-    }
-    else {
-        return ${params.SAFARI_CYCLE_ID}
-        }
-    }
