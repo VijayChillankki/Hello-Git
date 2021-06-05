@@ -13,7 +13,7 @@ properties([
               booleanParam(name: 'iphone', defaultValue: true, description: 'Controls whether to run tests on iPhone Browser or not'),
               booleanParam(name: 'galaxys20', defaultValue: true, description: 'Controls whether to run tests on GalaxyS20 Browser or not'),
               booleanParam(name: 'ipad', defaultValue: true, description: 'Controls whether to run tests on iPad Browser or not'),
-              separator(name: "end")
+              separator(name: "end"),
               string(name: 'BRANCH', defaultValue: 'main', description: 'The branch from which to run the tests.'),
               string(name: 'CHROME_QTEST_CYCLE_ID', defaultValue: '2478396', description: 'The Cycle ID is used for chrome test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'EDGE_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for edge test results within the QTest Platform. This number typically differs per release.'),
@@ -61,16 +61,16 @@ pipeline {
             }
         }
     }
+}
 
-        def getTestCycleIDbyBrowserType(BROWSER_TYPE) {
-        if (BROWSER_TYPE == 'chrome') {
-            return ${params.CHROME_QTEST_CYCLE_ID}
-        }
-        else if (BROWSER_TYPE == 'edge') {
-            return ${params.EDGE_QTEST_CYCLE_ID}
-        }
-        else {
-            return ${params.SAFARI_CYCLE_ID}
+    def getTestCycleIDbyBrowserType(BROWSER_TYPE) {
+    if (BROWSER_TYPE == 'chrome') {
+        return ${params.CHROME_QTEST_CYCLE_ID}
+    }
+    else if (BROWSER_TYPE == 'edge') {
+        return ${params.EDGE_QTEST_CYCLE_ID}
+    }
+    else {
+        return ${params.SAFARI_CYCLE_ID}
         }
     }
-}
