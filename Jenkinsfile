@@ -30,12 +30,7 @@ def mob = [
     ipad: params.ipad
 ]
 
-// def getTestCycleID(def browser) {
-//     if (browser == 'chrome') {
-//         return params.CHROME_QTEST_CYCLE_ID
-//     }
-//     else if (browser == 'edge')
-// }
+def PROJECT_ID = '91839'
 
 pipeline {
     agent {
@@ -68,7 +63,7 @@ pipeline {
                                 sh "echo -DBrowserType=browserstack_'${entity.key}' -Dtestng.report.xml.name=testng-result-${entity.key}.xml"
                                 sh " echo npm cache clean  --force"
                                 def browser = "${entity.key}".toUpperCase()
-                                sh "echo node delivery.js projectid=91839 cycleid=params.${browser}_QTEST_CYCLE_ID testngresultxml=testng-result-${entity.key}.xml"
+                                sh "echo node delivery.js projectid=${PROJECT_ID} cycleid=params.${browser}_QTEST_CYCLE_ID testngresultxml=testng-result-${entity.key}.xml"
                                 //sh "echo mv src/test/resources/Reports/Extent Report.html src/test/resources/Reports/Extent-Report-${entity-key}.html"
                                 }
                             }
