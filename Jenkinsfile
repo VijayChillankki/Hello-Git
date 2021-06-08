@@ -63,7 +63,8 @@ pipeline {
                                 sh "echo -DBrowserType=browserstack_'${entity.key}' -Dtestng.report.xml.name=testng-result-${entity.key}.xml"
                                 sh " echo npm cache clean  --force"
                                 def browser = "${entity.key}".toUpperCase()
-                                sh "echo node delivery.js projectid=${PROJECT_ID} cycleid=${params.${browser}_QTEST_CYCLE_ID} testngresultxml=testng-result-${entity.key}.xml"
+                                def testCycleId = "params.${browser}_QTEST_CYCLE_ID"
+                                sh "echo node delivery.js projectid=${PROJECT_ID} cycleid=${testCycleId} testngresultxml=testng-result-${entity.key}.xml"
                                 //sh "echo mv src/test/resources/Reports/Extent Report.html src/test/resources/Reports/Extent-Report-${entity-key}.html"
                                 }
                             }
