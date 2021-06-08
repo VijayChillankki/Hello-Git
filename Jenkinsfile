@@ -70,7 +70,7 @@ pipeline {
                                 def browser = "${entity.key}".toUpperCase()
                                 sh "echo node delivery.js projectid=91839 cycleid=params.${browser}_QTEST_CYCLE_ID testngresultxml=testng-result-${entity.key}.xml"
                                 //sh "echo mv src/test/resources/Reports/Extent Report.html src/test/resources/Reports/Extent-Report-${entity-key}.html"
-                                }
+                                }5
                             }
                         }
                     }
@@ -92,4 +92,11 @@ pipeline {
             }
         }
     }
+    post {
+    always {
+        sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
+        //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
+        cleanWs()
+    }
+}
 }
