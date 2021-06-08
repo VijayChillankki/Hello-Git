@@ -107,10 +107,8 @@ pipeline {
     }
     post {
     always {
-        if (params.Refresh == true) {
         sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
         //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
-        }
         cleanWs()
     }
 }
