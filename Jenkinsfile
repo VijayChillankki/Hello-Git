@@ -51,7 +51,7 @@ pipeline {
                 expression { return params.Refresh == true }
             }
             steps {
-                echo "Jenkinsfile reloaded successfully"
+                echo "Jenkinsfile reloaded successfully and Exiting early"
             }
         }
         stage('Execute Web Browsers') {
@@ -106,10 +106,13 @@ pipeline {
         }
     }
     post {
-    always {
-        sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
-        //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
-        cleanWs()
-    }
+        when {
+                expression { return params.Refresh == false }
+            }
+        always {
+            sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
+            //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
+            cleanWs()
+        }
 }
 }
