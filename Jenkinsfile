@@ -13,7 +13,7 @@ properties([
               string(name: 'BRANCH', defaultValue: 'main', description: 'The branch from which to run the tests.'),
               string(name: 'CHROME_QTEST_CYCLE_ID', defaultValue: '2478396', description: 'The Cycle ID is used for chrome test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'EDGE_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for edge test results within the QTest Platform. This number typically differs per release.'),
-              string(name: 'SAFARI_CYCLE_ID', defaultValue: '2478398', description: 'The Cycle ID is used for safari test results within the QTest Platform. This number typically differs per release.'),
+              string(name: 'SAFARI_QTEST_CYCLE_ID', defaultValue: '2478398', description: 'The Cycle ID is used for safari test results within the QTest Platform. This number typically differs per release.'),
     ]) 
 ])
 
@@ -63,13 +63,15 @@ pipeline {
                                 sh "echo -DBrowserType=browserstack_'${entity.key}' -Dtestng.report.xml.name=testng-result-${entity.key}.xml"
                                 sh " echo npm cache clean  --force"
                                 def browser = "${entity.key}".toUpperCase()
-                                def testCycleId = "params.${browser}_QTEST_CYCLE_ID"
+                                def var_testCycleId = "params.${browser}_QTEST_CYCLE_ID"
+                                def testCycleId = params."${browser}_QTEST_CYCLE_ID"
                                 sh "echo node delivery.js projectid=${PROJECT_ID} cycleid=${testCycleId} testngresultxml=testng-result-${entity.key}.xml"
+                                sh "echo node delivery.js projectid=91839 cycleid=${params.CHROME_QTEST_CYCLE_ID}"
                                 //sh "echo mv src/test/resources/Reports/Extent Report.html src/test/resources/Reports/Extent-Report-${entity-key}.html"
                                 }
                             }
                         }
-                    }
+                    }8
                 }
             }
         }
