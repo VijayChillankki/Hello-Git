@@ -15,7 +15,7 @@ properties([
               string(name: 'EDGE_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for edge test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'SAFARI_QTEST_CYCLE_ID', defaultValue: '2478398', description: 'The Cycle ID is used for safari test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'IPHONE_QTEST_CYCLE_ID', defaultValue: '2478396', description: 'The Cycle ID is used for iPhone test results within the QTest Platform. This number typically differs per release.'),
-              string(name: 'GALAXY20_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for galaxyS20 test results within the QTest Platform. This number typically differs per release.'),
+              string(name: 'GALAXYS20_QTEST_CYCLE_ID', defaultValue: '2478397', description: 'The Cycle ID is used for galaxyS20 test results within the QTest Platform. This number typically differs per release.'),
               string(name: 'IPAD_QTEST_CYCLE_ID', defaultValue: '2478398', description: 'The Cycle ID is used for iPad test results within the QTest Platform. This number typically differs per release.'),
     ]) 
 ])
@@ -48,20 +48,22 @@ pipeline {
     stages {
         stage('Read Jenkinsfile') {
             when {
-                expression { params.Refresh == true }
+                expression { return params.Refresh == true }
             }
             steps {
                 echo "Jenkinsfile reloaded successfully"
             }
         }
         stage('Execute Web Browsers') {
+            when {
+                expression { return params.Refresh == false }
+            }
             steps {
                 script {
                     web.each { entity ->
                         stage (entity.key) {
                             if (entity.value) {
                                 echo "$entity.key browser executed"
-                                sleep 5
                                 dir(env.WORKSPACE) {
                                 sh "echo -DBrowserType=browserstack_'${entity.key}' -Dtestng.report.xml.name=testng-result-${entity.key}.xml"
                                 sh " echo npm cache clean  --force"
@@ -78,13 +80,15 @@ pipeline {
             }
         }
         stage('Execute Mobile Browsers') {
+            when {
+                expression { return params.Refresh == false }
+            }
             steps {
                 script {
                     mob.each { entity ->
                         stage (entity.key) {
                             if (entity.value) {
                                 echo "$entity.key mobile browser executed"
-                                sleep 5
                                 dir(env.WORKSPACE) {
                                 sh "echo -DBrowserType=browserstack_'${entity.key}' -Dtestng.report.xml.name=testng-result-${entity.key}.xml"
                                 sh " echo npm cache clean  --force"
