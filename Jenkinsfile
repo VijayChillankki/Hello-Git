@@ -106,10 +106,14 @@ pipeline {
         }
     }
     post {
-    always {
-        sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
-        //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
-        cleanWs()
-    }
-}
+        always {
+            script {
+                if (params.Refresh == false) {
+                    sh "echo See browserstack execution details at https://automate.browserstack.com/dashboard/"
+                    //archiveArtifacts artifacts: 'src/test/resources/Reports/Extent-*.html'
+                }
+                cleanWs()
+            }
+        }
+    }   
 }
